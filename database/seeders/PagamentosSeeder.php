@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class PagamentosSeeder extends Seeder
 {
@@ -14,16 +13,6 @@ class PagamentosSeeder extends Seeder
         DB::table('gateways')->insert([
             ['name' => 'Gateway 1', 'is_active' => true, 'priority' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Gateway 2', 'is_active' => true, 'priority' => 2, 'created_at' => now(), 'updated_at' => now()],
-        ]);
-
-        // Usuário admin
-        DB::table('users')->insert([
-            'name' => 'Administrador',
-            'email' => 'admin@pagamentos.com',
-            'password' => Hash::make('password'),
-            'role' => 'ADMIN',
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         // Produtos

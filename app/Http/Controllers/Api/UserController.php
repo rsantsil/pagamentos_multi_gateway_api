@@ -75,8 +75,16 @@ class UserController extends Controller
         ]);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        // ✅ CORREÇÃO: Impedir que o usuário delete a própria conta
+        if ($request->user()->id === $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Você não pode deletar sua própria conta'
+            ], 403);
+        }
+
         $user->delete();
 
         return response()->json([

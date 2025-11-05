@@ -17,6 +17,16 @@ class TransactionController extends Controller
         $this->paymentService = $paymentService;
     }
 
+    public function show(Transaction $transaction)
+    {
+        $transaction->load(['client', 'gateway', 'products']);
+
+        return response()->json([
+            'success' => true,
+            'data' => $transaction
+        ]);
+    }
+
     public function purchase(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -64,25 +74,25 @@ class TransactionController extends Controller
     }
 
     public function index(Request $request)
-{
-    // TODO: Implementar autorização baseada em roles
-    $transactions = Transaction::with(['client', 'gateway', 'products'])
-        ->latest()
-        ->paginate(10);
+    {
+        // TODO: Implementar autorização baseada em roles
+        $transactions = Transaction::with(['client', 'gateway', 'products'])
+            ->latest()
+            ->paginate(10);
 
-    return response()->json([
-        'success' => true,
-        'data' => $transactions->items(),
-        'pagination' => [
-            'total' => $transactions->total(),
-            'per_page' => $transactions->perPage(),
-            'current_page' => $transactions->currentPage(),
-            'last_page' => $transactions->lastPage(),
-            'from' => $transactions->firstItem(),
-            'to' => $transactions->lastItem(),
-        ]
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'data' => $transactions->items(),
+            'pagination' => [
+                'total' => $transactions->total(),
+                'per_page' => $transactions->perPage(),
+                'current_page' => $transactions->currentPage(),
+                'last_page' => $transactions->lastPage(),
+                'from' => $transactions->firstItem(),
+                'to' => $transactions->lastItem(),
+            ]
+        ]);
+    }
     public function refund(Transaction $transaction)
     {
         // Implementar lógica de reembolso

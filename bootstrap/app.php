@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ManagerMiddleware;
+use App\Http\Middleware\FinanceMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -32,6 +35,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+            
+            // MIDDLEWERS PERSONALIZADOS
+            'admin' => AdminMiddleware::class,
+            'manager' => ManagerMiddleware::class,
+            'finance' => FinanceMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
