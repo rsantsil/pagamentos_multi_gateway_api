@@ -28,7 +28,7 @@ class PaymentServiceTest extends TestCase
         $this->product = Product::factory()->create(['amount' => 10000]);
     }
 
-    /** @test */
+    
     public function it_can_process_payment_successfully()
     {
         // Arrange
@@ -57,14 +57,14 @@ class PaymentServiceTest extends TestCase
         $this->assertArrayHasKey('transaction_id', $result);
     }
 
-    /** @test */
+    
     public function it_falls_back_to_second_gateway_when_first_fails()
     {
         // Arrange
         $paymentData = [
             'amount' => 10000,
             'card_number' => '5569000000006063',
-            'cvv' => '100', // CVV que causa erro no Gateway 1
+            'cvv' => '100', 
             'client_name' => 'John Doe',
             'client_email' => 'john@example.com'
         ];
@@ -85,7 +85,7 @@ class PaymentServiceTest extends TestCase
         $this->assertEquals('approved', $result['status']);
     }
 
-    /** @test */
+    
     public function it_creates_client_when_not_exists()
     {
         // Arrange

@@ -77,7 +77,7 @@ class UserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        // ✅ CORREÇÃO: Impedir que o usuário delete a própria conta
+        // Impedir que o usuário delete a própria conta
         if ($request->user()->id === $user->id) {
             return response()->json([
                 'success' => false,

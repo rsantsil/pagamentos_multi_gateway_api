@@ -29,7 +29,7 @@ class UserControllerTest extends TestCase
         $this->userToken = $user->createToken('test-token')->plainTextToken;
     }
 
-    /** @test */
+    
     public function admin_can_list_users()
     {
         User::factory()->count(3)->create();
@@ -47,7 +47,7 @@ class UserControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function admin_can_create_user()
     {
         $userData = [
@@ -74,7 +74,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    
     public function admin_can_update_user()
     {
         $user = User::factory()->create(['role' => 'USER']);
@@ -101,7 +101,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    
     public function admin_can_delete_user()
     {
         $user = User::factory()->create();
@@ -119,7 +119,7 @@ class UserControllerTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 
-    /** @test */
+    
     public function user_cannot_delete_own_account()
     {
         // Criar um usuário ADMIN separado para tentar deletar a si mesmo
@@ -137,7 +137,7 @@ class UserControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function non_admin_cannot_manage_users()
     {
         // Manager não pode gerenciar usuários

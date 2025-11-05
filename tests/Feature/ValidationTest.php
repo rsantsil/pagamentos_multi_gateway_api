@@ -11,7 +11,7 @@ class ValidationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    
     public function purchase_validates_required_fields()
     {
         $response = $this->postJson('/api/purchase', []);
@@ -22,7 +22,7 @@ class ValidationTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function purchase_validates_card_number_format()
     {
         $product = Product::factory()->create();
@@ -39,7 +39,7 @@ class ValidationTest extends TestCase
                 ->assertJsonValidationErrors(['card_number']);
     }
 
-    /** @test */
+    
     public function purchase_validates_email_format()
     {
         $product = Product::factory()->create();
@@ -56,7 +56,7 @@ class ValidationTest extends TestCase
                 ->assertJsonValidationErrors(['client_email']);
     }
 
-    /** @test */
+    
     public function user_creation_validates_required_fields()
     {
         $admin = User::factory()->create(['role' => 'ADMIN']);
@@ -70,7 +70,7 @@ class ValidationTest extends TestCase
                 ->assertJsonValidationErrors(['name', 'email', 'password', 'role']);
     }
 
-    /** @test */
+    
     public function user_creation_validates_unique_email()
     {
         $existingUser = User::factory()->create();

@@ -15,14 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Adicionar middleware do Sanctum para API stateful
+        // middleware do Sanctum para API stateful
         $middleware->statefulApi();
         
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
-        // Middleware aliases - usar os do Laravel diretamente
+        // Middleware aliases 
         $middleware->alias([
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
             'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

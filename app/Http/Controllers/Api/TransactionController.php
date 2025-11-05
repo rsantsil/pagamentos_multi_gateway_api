@@ -75,7 +75,6 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-        // TODO: Implementar autorização baseada em roles
         $transactions = Transaction::with(['client', 'gateway', 'products'])
             ->latest()
             ->paginate(10);

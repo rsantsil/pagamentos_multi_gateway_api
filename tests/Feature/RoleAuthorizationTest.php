@@ -15,7 +15,7 @@ class RoleAuthorizationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    
     public function admin_can_access_all_routes()
     {
         $admin = User::factory()->create(['role' => 'ADMIN']);
@@ -28,7 +28,7 @@ class RoleAuthorizationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    
     public function manager_can_manage_users_and_products()
     {
         $manager = User::factory()->create(['role' => 'MANAGER']);
@@ -50,10 +50,10 @@ class RoleAuthorizationTest extends TestCase
             'Authorization' => 'Bearer ' . $token
         ])->getJson('/api/users');
 
-        $response->assertStatus(403); // ← CORRIGIDO: era 200, agora 403
+        $response->assertStatus(403); 
     }
 
-    /** @test */
+    
     public function finance_can_manage_products_and_process_refunds()
     {
         // Mock do PaymentService para reembolso
@@ -92,7 +92,7 @@ class RoleAuthorizationTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
+    
     public function user_can_only_access_basic_routes()
     {
         $user = User::factory()->create(['role' => 'USER']);
@@ -145,7 +145,7 @@ class RoleAuthorizationTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    
     public function unauthenticated_user_cannot_access_protected_routes()
     {
         $response = $this->getJson('/api/users');

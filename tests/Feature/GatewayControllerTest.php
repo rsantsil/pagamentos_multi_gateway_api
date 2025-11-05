@@ -25,7 +25,7 @@ class GatewayControllerTest extends TestCase
         $this->userToken = $user->createToken('test-token')->plainTextToken;
     }
 
-    /** @test */
+    
     public function anyone_can_list_gateways()
     {
         Gateway::factory()->count(2)->create();
@@ -43,7 +43,7 @@ class GatewayControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function admin_can_toggle_gateway_status()
     {
         $gateway = Gateway::factory()->create(['is_active' => true]);
@@ -64,7 +64,7 @@ class GatewayControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    
     public function admin_can_update_gateway_priority()
     {
         $gateway = Gateway::factory()->create(['priority' => 1]);
@@ -87,7 +87,7 @@ class GatewayControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    
     public function non_admin_cannot_manage_gateways()
     {
         $gateway = Gateway::factory()->create();

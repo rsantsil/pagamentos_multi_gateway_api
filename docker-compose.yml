@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/var/www/html
     ports:
-      - "8000:8000"  # ✅ Agora deve funcionar
+      - "8000:8000"  
     depends_on:
       - mysql
       - gateways-mock

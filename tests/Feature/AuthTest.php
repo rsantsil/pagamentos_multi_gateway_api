@@ -9,7 +9,7 @@ use Tests\TestCase;
 class AuthTest extends TestCase
 {
     use DatabaseTransactions;
-    /** @test */
+    
     public function user_can_login_with_valid_credentials()
     {
         // Arrange
@@ -34,7 +34,7 @@ class AuthTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function user_cannot_login_with_invalid_credentials()
     {
         // Act
@@ -50,7 +50,7 @@ class AuthTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    
     public function authenticated_user_can_logout()
     {
         // Arrange

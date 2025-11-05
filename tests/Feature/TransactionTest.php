@@ -35,7 +35,7 @@ class TransactionTest extends TestCase
             'is_active' => true
         ]);
 
-        // Mock do PaymentService - CORRIGIDO
+        // Mock do PaymentService 
         $this->paymentServiceMock = Mockery::mock(PaymentService::class);
 
         // Binding correto no container Laravel
@@ -44,12 +44,10 @@ class TransactionTest extends TestCase
         // Debug: verificar binding
         $bound = app()->bound(PaymentService::class);
         $instance = app(PaymentService::class);
-       // echo "PaymentService bound: " . ($bound ? 'YES' : 'NO') . "\n";
-        //echo "Instance is mock: " . ($instance instanceof \Mockery\MockInterface ? 'YES' : 'NO') . "\n";
     }
 
-    /** @test */
-    /** @test */
+    
+    
     public function user_can_make_purchase()
     {
         // Arrange
@@ -58,7 +56,7 @@ class TransactionTest extends TestCase
             'name' => 'Test Product'
         ]);
 
-        // Mock do processPayment para retornar sucesso - CORRIGIDO
+        // Mock do processPayment para retornar sucesso
         $this->paymentServiceMock
             ->shouldReceive('processPayment')
             ->once()
@@ -70,7 +68,7 @@ class TransactionTest extends TestCase
             }))
             ->andReturn([
                 'success' => true,
-                'transaction_id' => 1, // ← ADICIONADO transaction_id
+                'transaction_id' => 1, 
                 'gateway_used' => 'Gateway 1',
                 'status' => 'approved'
             ]);
@@ -78,7 +76,7 @@ class TransactionTest extends TestCase
         // Act
         $response = $this->postJson('/api/purchase', [
             'products' => [
-                ['id' => $product->id, 'quantity' => 1] // ← CORRIGIDO: adicionado id
+                ['id' => $product->id, 'quantity' => 1] 
             ],
             'card_number' => '4111111111111111',
             'cvv' => '123',
@@ -94,13 +92,13 @@ class TransactionTest extends TestCase
             ])
             ->assertJsonStructure([
                 'success',
-                'transaction_id', // ← Garantir que tem transaction_id
+                'transaction_id', 
                 'gateway_used',
                 'status'
             ]);
     }
 
-    /** @test */
+    
     public function purchase_fails_with_invalid_product()
     {
         // Mock para este teste específico
@@ -124,8 +122,8 @@ class TransactionTest extends TestCase
             ->assertJsonValidationErrors(['products.0.id']);
     }
 
-    /** @test */
-    /** @test */
+    
+    
     public function purchase_fails_when_payment_service_fails()
     {
         // Arrange
@@ -133,20 +131,20 @@ class TransactionTest extends TestCase
             'amount' => 10000
         ]);
 
-        // Mock do processPayment para retornar falha - CORRIGIDO
+        // Mock do processPayment para retornar falha
         $this->paymentServiceMock
             ->shouldReceive('processPayment')
             ->once()
             ->andReturn([
                 'success' => false,
                 'error' => 'Todos os gateways falharam',
-                'transaction_id' => 2 // ← ADICIONADO transaction_id mesmo em falha
+                'transaction_id' => 2 
             ]);
 
         // Act
         $response = $this->postJson('/api/purchase', [
             'products' => [
-                ['id' => $product->id, 'quantity' => 1] // ← CORRIGIDO: adicionado id
+                ['id' => $product->id, 'quantity' => 1] 
             ],
             'card_number' => '4111111111111111',
             'cvv' => '123',
@@ -162,7 +160,7 @@ class TransactionTest extends TestCase
             ]);
     }
 
-    /** @test */
+    
     public function authenticated_user_can_list_transactions()
     {
         // Arrange
@@ -183,7 +181,7 @@ class TransactionTest extends TestCase
             ]);
     }
 
-    /** @test */
+    
     public function finance_user_can_refund_transaction()
     {
         // Arrange
@@ -217,7 +215,7 @@ class TransactionTest extends TestCase
             ]);
     }
 
-    /** @test */
+    
     public function user_cannot_refund_transaction()
     {
         // Arrange
@@ -244,7 +242,7 @@ class TransactionTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    
     public function cannot_refund_non_approved_transaction()
     {
         // Arrange
@@ -275,7 +273,7 @@ class TransactionTest extends TestCase
             ]);
     }
 
-    /** @test */
+    
     public function admin_can_refund_transaction()
     {
         // Arrange
@@ -309,10 +307,10 @@ class TransactionTest extends TestCase
             ]);
     }
 
-    /** @test */
-    /** @test */
-    /** @test */
-    /** @test */
+    
+    
+    
+    
     public function finance_can_manage_products_and_process_refunds()
     {
         $finance = User::factory()->create(['role' => 'FINANCE']);
@@ -326,7 +324,7 @@ class TransactionTest extends TestCase
             'external_id' => 'test_123'
         ]);
 
-        // Mock para o reembolso - CORRIGIDO
+        // Mock para o reembolso 
         // O TransactionController chama refundGateway1/refundGateway2 diretamente
         $this->paymentServiceMock
             ->shouldReceive('refundGateway1')
