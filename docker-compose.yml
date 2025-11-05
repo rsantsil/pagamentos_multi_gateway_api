@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pagamentos-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8000:8000"  # ✅ Agora deve funcionar
+    depends_on:
+      - mysql
+      - gateways-mock
+
+  mysql:
+    image: mysql:8.0
+    container_name: pagamentos-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: pagamentos_multi_gateway
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  gateways-mock:
+    image: matheusprotzen/gateways-mock
+    container_name: pagamentos-gateways
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+    environment:
+      - REMOVE_AUTH=false
+
+volumes:
+  mysql_data:
+    driver: local
