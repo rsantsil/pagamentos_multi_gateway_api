@@ -93,18 +93,46 @@ class TransactionController extends Controller
             ]
         ]);
     }
+
     public function refund(Transaction $transaction)
     {
-        // Implementar lógica de reembolso
-        // Por enquanto, apenas marcamos como refunded
-        $transaction->update([
-            'status' => 'refunded'
-        ]);
+        // Verificar se a transação pode ser reembolsada
+        if ($transaction->status !== 'approved') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Apenas transações aprovadas podem ser reembolsadas'
+            ], 400);
+        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Transação reembolsada com sucesso',
-            'data' => $transaction
-        ]);
+        try {
+            // Chamar o gateway para reembolso real apenas se tiver gateway_id
+            if ($transaction->gateway_id && $transaction->gateway) {
+                $gateway = $transaction->gateway;
+
+                if ($gateway->name === 'Gateway 1') {
+                    $this->paymentService->refundGateway1($transaction);
+                } elseif ($gateway->name === 'Gateway 2') {
+                    $this->paymentService->refundGateway2($transaction);
+                }
+            }
+
+            // Atualizar status da transação
+            $transaction->update([
+                'status' => 'refunded'
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Transação reembolsada com sucesso',
+                'data' => $transaction->fresh()
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao processar reembolso',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -13,6 +13,7 @@ class PaymentServiceTest extends TestCase
     use DatabaseTransactions;
 
     private PaymentService $paymentService;
+    private Product $product;
 
     protected function setUp(): void
     {
@@ -23,8 +24,8 @@ class PaymentServiceTest extends TestCase
         Gateway::factory()->create(['name' => 'Gateway 1', 'priority' => 1, 'is_active' => true]);
         Gateway::factory()->create(['name' => 'Gateway 2', 'priority' => 2, 'is_active' => true]);
         
-        // Criar produto de teste
-        Product::factory()->create(['id' => 1, 'amount' => 10000]);
+        // Criar produto de teste e salvar a instância
+        $this->product = Product::factory()->create(['amount' => 10000]);
     }
 
     /** @test */
@@ -40,7 +41,11 @@ class PaymentServiceTest extends TestCase
         ];
 
         $products = [
-            ['id' => 1, 'quantity' => 1, 'unit_amount' => 10000]
+            [
+                'id' => $this->product->id,
+                'quantity' => 1, 
+                'unit_amount' => 10000
+            ]
         ];
 
         // Act
@@ -65,7 +70,11 @@ class PaymentServiceTest extends TestCase
         ];
 
         $products = [
-            ['id' => 1, 'quantity' => 1, 'unit_amount' => 10000]
+            [
+                'id' => $this->product->id,
+                'quantity' => 1, 
+                'unit_amount' => 10000
+            ]
         ];
 
         // Act
@@ -89,7 +98,11 @@ class PaymentServiceTest extends TestCase
         ];
 
         $products = [
-            ['id' => 1, 'quantity' => 1, 'unit_amount' => 10000]
+            [
+                'id' => $this->product->id,
+                'quantity' => 1, 
+                'unit_amount' => 10000
+            ]
         ];
 
         // Act

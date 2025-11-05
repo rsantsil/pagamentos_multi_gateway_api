@@ -175,4 +175,44 @@ class PaymentService
             'transaction_id' => $transaction->id,
         ];
     }
+
+    public function refundGateway1(Transaction $transaction)
+{
+    $loginResponse = Http::post(config('services.gateway1.base_url') . '/login', [
+        'email' => config('services.gateway1.email'),
+        'token' => config('services.gateway1.token'),
+    ]);
+
+    if (!$loginResponse->successful()) {
+        throw new \Exception('Falha no login Gateway 1 para reembolso');
+    }
+
+    $token = $loginResponse->json('token');
+
+    $response = Http::withToken($token)->post(
+        config('services.gateway1.base_url') . "/transactions/{$transaction->external_id}/charge_back"
+    );
+
+    if (!$response->successful()) {
+        throw new \Exception('Falha no reembolso Gateway 1: ' . $response->body());
+    }
+
+    return $response->json();
+}
+
+public function refundGateway2(Transaction $transaction)
+{
+    $response = Http::withHeaders([
+        'Gateway-Auth-Token' => config('services.gateway2.token'),
+        'Gateway-Auth-Secret' => config('services.gateway2.secret'),
+    ])->post(config('services.gateway2.base_url') . '/transacoes/reembolso', [
+        'id' => $transaction->external_id
+    ]);
+
+    if (!$response->successful()) {
+        throw new \Exception('Falha no reembolso Gateway 2: ' . $response->body());
+    }
+
+    return $response->json();
+}
 }

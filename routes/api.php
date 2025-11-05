@@ -20,26 +20,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
-    // Transações (USER, FINANCE, MANAGER, ADMIN)
+    // Gateways - todos autenticados podem listar
+    Route::get('/gateways', [GatewayController::class, 'index']);
+    
+    // Transações - todos os autenticados
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
     
-    // Clientes (USER, FINANCE, MANAGER, ADMIN)
+    // Clientes - todos os autenticados
     Route::get('/clients', [ClientController::class, 'index']);
     Route::get('/clients/{client}', [ClientController::class, 'show']);
 });
 
 // Rotas apenas para ADMIN
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    // Gestão de usuários (apenas ADMIN)
-    Route::apiResource('users', UserController::class);
-    
     // Gestão de gateways (apenas ADMIN)
     Route::patch('/gateways/{gateway}/toggle', [GatewayController::class, 'toggle']);
     Route::patch('/gateways/{gateway}/priority', [GatewayController::class, 'updatePriority']);
+    
+    // Gestão de usuários (apenas ADMIN)
+    Route::apiResource('users', UserController::class);
 });
 
-// Rotas para MANAGER e ADMIN
+// Rotas para MANAGER e ADMIN (gestão de produtos)
 Route::middleware(['auth:sanctum', 'manager'])->group(function () {
     // Gestão de produtos (MANAGER e ADMIN)
     Route::post('/products', [ProductController::class, 'store']);
@@ -47,13 +50,8 @@ Route::middleware(['auth:sanctum', 'manager'])->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 });
 
-// Rotas para FINANCE e ADMIN
+// Rotas para FINANCE e ADMIN (apenas reembolsos)
 Route::middleware(['auth:sanctum', 'finance'])->group(function () {
     // Reembolsos (FINANCE e ADMIN)
     Route::post('/transactions/{transaction}/refund', [TransactionController::class, 'refund']);
-});
-
-// Rotas para todos os autenticados (inclui listagem de gateways)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/gateways', [GatewayController::class, 'index']);
 });
