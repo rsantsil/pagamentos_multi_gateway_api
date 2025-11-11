@@ -137,6 +137,33 @@ http://localhost:8000
 | POST   | /api/logout                       | Logout                       |
 | GET    | /api/user                         | Dados do usuário logado      |
 
+## 🧪 Testando a API
+
+### Collection do Postman/Insomnia
+
+Para facilitar os testes, use a collection completa:
+
+1. **Baixe o arquivo**: [`postman_collection.json`](postman_collection.json)
+2. **Importe** no Postman, Insomnia ou sua ferramenta preferida
+3. **Configure as variáveis**:
+   - `base_url`: `http://localhost:8000/api`
+   - `auth_token`: (será preenchido automaticamente após login)
+
+### 🐳 Gateways Mock para Testes
+
+Para desenvolvimento e testes, utilize os gateways mock:
+
+**Com autenticação:**
+```bash
+docker run -p 3001:3001 -p 3002:3002 matheusprotzen/gateways-mock
+```
+
+**Sem autenticação:**
+```bash
+docker run -p 3001:3001 -p 3002:3002 -e REMOVE_AUTH='true' matheusprotzen/gateways-mock
+```
+
+
 ## 💳 Exemplos de Uso
 
 ### Processar Pagamento

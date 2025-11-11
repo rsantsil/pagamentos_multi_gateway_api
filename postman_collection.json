@@ -1,0 +1,314 @@
+{
+    "info": {
+        "_postman_id": "3e618a0f-a01b-4186-9b99-dec8d1affbb9",
+        "name": "Multi-Gateways Payment API",
+        "description": "Collection completa para testar a API de Pagamentos Multi-Gateway\n\n## 🚀 Como usar\n\n1. Importe esta collection no Postman ou Insomnia\n2. Configure as variáveis de ambiente\n3. Execute os requests na ordem\n\n## 🔧 Configuração dos Gateways Mock\n\n**Com autenticação:**\n```bash\ndocker run -p 3001:3001 -p 3002:3002 matheusprotzen/gateways-mock\n```\n\n**Sem autenticação:**\n```bash\ndocker run -p 3001:3001 -p 3002:3002 -e REMOVE_AUTH='true' matheusprotzen/gateways-mock\n```",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "version": "1.0.0"
+    },
+    "item": [
+        {
+            "name": "🔐 Autenticação",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/api/login",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:8000/api/logout",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "logout"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "🛒 Produtos",
+            "item": [
+                {
+                    "name": "Listar Produtos (Público)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:8000/api/products",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "products"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Criar Produto (Manager+)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Novo Produto Teste\",\n    \"amount\": 15000,\n    \"description\": \"Produto criado via API\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/api/products",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "products"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "💳 Pagamentos",
+            "item": [
+                {
+                    "name": "Processar Compra (Público)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"products\": [\n        {\n            \"id\": 1,\n            \"quantity\": 2\n        }\n    ],\n    \"card_number\": \"4111111111111111\",\n    \"cvv\": \"123\",\n    \"client_name\": \"João Silva\",\n    \"client_email\": \"joao@email.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:8000/api/purchase",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "purchase"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "🔄 Transações",
+            "item": [
+                {
+                    "name": "Listar Transações",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:8000/api/transactions",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "transactions"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Reembolsar Transação (Finance+)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:8000/api/transactions/1/refund",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "8000",
+                            "path": ["api", "transactions", "1", "refund"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "🔧 Gateways Mock (Testes)",
+            "description": "Endpoints dos gateways mock para desenvolvimento e testes",
+            "item": [
+                {
+                    "name": "Gateway 1 - Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"dev@betalent.tech\",\n    \"token\": \"FEC9BB078BF338F464F96B48089EB498\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3001/login",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "3001",
+                            "path": ["login"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Gateway 1 - Criar Transação",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{gateway1_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"amount\": 1000,\n    \"name\": \"tester\",\n    \"email\": \"tester@email.com\",\n    \"cardNumber\": \"5569000000006063\",\n    \"cvv\": \"010\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3001/transactions",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "3001",
+                            "path": ["transactions"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Gateway 2 - Criar Transação",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Gateway-Auth-Token",
+                                "value": "tk_f2198cc671b5289fa856"
+                            },
+                            {
+                                "key": "Gateway-Auth-Secret",
+                                "value": "3d15e8ed6131446ea7e3456728b1211f"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"valor\": 1000,\n    \"nome\": \"tester\",\n    \"email\": \"tester@email.com\",\n    \"numeroCartao\": \"5569000000006063\",\n    \"cvv\": \"010\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3002/transacoes",
+                            "protocol": "http",
+                            "host": ["localhost"],
+                            "port": "3002",
+                            "path": ["transacoes"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "auth_token",
+            "value": "",
+            "type": "string",
+            "description": "Token JWT obtido no login"
+        },
+        {
+            "key": "gateway1_token",
+            "value": "",
+            "type": "string",
+            "description": "Token do Gateway 1 (obtido no login)"
+        }
+    ]
+}
